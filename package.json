@@ -1,5 +1,5 @@
 {
-  "name": "saudi-digital-marketing-ops-site",
+  "name": "yech-website",
   "version": "0.1.0",
   "private": true,
   "description": "Bilingual (EN/AR) public website for YECH (YECH Marketing Operations). Zero runtime dependencies.",
@@ -9,8 +9,9 @@
   },
   "scripts": {
     "build": "node scripts/build.mjs",
-    "start": "node server.mjs",
+    "start": "node scripts/serve.mjs",
     "check": "node scripts/check-links.mjs",
-    "test": "node --test tests/"
+    "test": "node --test tests/",
+    "vercel:config": "node scripts/write-vercel-config.mjs"
   }
 }

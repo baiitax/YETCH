@@ -109,6 +109,8 @@ async function main() {
     await writeHtml(`${lang}/404/index.html`, renderPage(utilityPages.notFound, lang, ctx));
     await writeHtml(`${lang}/maintenance/index.html`, renderPage(utilityPages.maintenance, lang, ctx));
   }
+  // Vercel serves this file for unmatched paths (English 404, noindex).
+  await writeHtml('404.html', renderPage(utilityPages.notFound, 'en', ctx));
 
   // Root: language negotiation fallback (the server also redirects)
   await writeHtml('index.html', `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="robots" content="noindex"><meta http-equiv="refresh" content="0; url=/en/"><link rel="canonical" href="${SITE.origin}/en/"><title>${SITE.brandName.en}</title></head><body><a href="/en/">English</a> · <a href="/ar/">العربية</a><script>${INLINE.rootRedirect}</script></body></html>`);

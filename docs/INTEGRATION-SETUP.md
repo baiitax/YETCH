@@ -2,9 +2,16 @@
 
 This build integrates with nothing by default. Every integration below is **pending configuration**. None is shown to visitors as available until it is verified in your environment.
 
-## 1. Enquiry storage (active by default)
+## 0. Vercel (current hosting target)
 
-- Records are appended to `DATA_DIR/submissions.jsonl`, one JSON object per line.
+- Vercel serves `dist/` statically and runs `api/enquiry.js` for enquiries. The Vercel filesystem is not durable, so **`NOTIFY_WEBHOOK_URL` is required** there. The destination is the record store. Without it, enquiries return 503 and are not reported as received.
+- Set environment variables in Project Settings. Do not put webhook URLs in `vercel.json` or source control.
+- After changing `src/inline.mjs` or the security headers, run `npm run vercel:config` and commit `vercel.json`.
+- Maintenance mode is not available as an environment switch on the static site.
+
+## 1. Enquiry storage (local server only)
+
+- Local server (`npm start`): records are appended to `DATA_DIR/submissions.jsonl`, one JSON object per line. Vercel does not use this store.
 - Directory mode 0700, file mode 0600. Owned by the service user.
 - Each record contains: `reference`, `receivedAt`, `formType`, `lang`, `data` (validated and normalised), `consent` (privacy acknowledgement, marketing opt-in, notice version) and `status: "new"`.
 - Recommended: store `DATA_DIR` on an encrypted volume outside the web root, back it up, and apply your retention schedule.
