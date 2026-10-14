@@ -1,8 +1,8 @@
-# [Brand Name] — Bilingual Marketing Operations Website (v1)
+# YECH — Bilingual Marketing Operations Website (v1)
 
-Public website for a Digital Marketing Operations-as-a-Service company. English and Arabic (RTL-correct), about 28 logical pages rendered in both languages (56 HTML pages), a server-validated enquiry API, and legal drafts that are clearly marked as drafts.
+Public website for YECH. The initial service is **YECH Marketing Operations**; the future software platform, **YECH Marketing OS**, is planned and not yet available. English and Arabic (RTL-correct), about 28 logical pages rendered in both languages (56 HTML pages), a server-validated enquiry API, and legal drafts that are clearly marked as drafts.
 
-> **Status: pre-launch build.** The brand name, contact channels, legal entity details, legal text, pricing approval, photography and enquiry destination are placeholders. See `docs/CONTENT-PUBLICATION-CHECKLIST.md` before publishing anything.
+> **Status: pre-launch build.** Contact channels, legal entity details, legal text, pricing approval, photography and enquiry destination are placeholders. See `docs/CONTENT-PUBLICATION-CHECKLIST.md` before publishing anything.
 
 ## Why there is no framework
 

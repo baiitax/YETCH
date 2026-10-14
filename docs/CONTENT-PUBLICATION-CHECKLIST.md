@@ -4,7 +4,8 @@ Do not publish the site (or remove the `noindex` placeholder) until every item b
 
 ## A. Identity and contact (placeholders in `src/site.mjs`)
 
-- [ ] Confirm the trading brand name in English and Arabic. Currently `[Brand Name]` / `[اسم العلامة]`.
+- [ ] Confirm the brand **YECH** and its Arabic usage. The site uses `YECH` in Latin script in both languages. Confirm whether an Arabic spelling is wanted.
+- [ ] Confirm the service name **YECH Marketing Operations** and the planned platform name **YECH Marketing OS** (Arabic copy uses the Latin names). Confirm that the platform is described only as planned until it exists.
 - [ ] Set the production origin. Currently `https://example.invalid`. This drives canonical URLs, hreflang, sitemap and robots.
 - [ ] Provide contact channels (`email`, `phone`, `whatsapp`, `address`). They are `null` and not displayed until set. Do not invent an address.
 - [ ] Confirm the enquiry handling owner and response-time promise. The site currently promises no response time.

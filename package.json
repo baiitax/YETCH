@@ -2,7 +2,7 @@
   "name": "saudi-digital-marketing-ops-site",
   "version": "0.1.0",
   "private": true,
-  "description": "Bilingual (EN/AR) public website for a Digital Marketing Operations-as-a-Service company. Zero runtime dependencies.",
+  "description": "Bilingual (EN/AR) public website for YECH (YECH Marketing Operations). Zero runtime dependencies.",
   "type": "module",
   "engines": {
     "node": ">=20"

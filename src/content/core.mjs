@@ -20,12 +20,12 @@ export const corePages = [
       'Campaign management, lead tracking and coordinated follow-up in one organized growth service for Saudi businesses. Transparent fees; advertising budgets stay under your control.',
       'إدارة الحملات وتتبع العملاء المحتملين وتنسيق المتابعة ضمن خدمة نمو متكاملة للشركات في السعودية. رسوم واضحة، وتبقى الميزانية الإعلانية تحت سيطرتك.'
     ),
-    homeTitle: P('Make Every Marketing Enquiry Count | [Brand Name]', 'اجعل كل استفسار تسويقي فرصة تستحق المتابعة | [اسم العلامة]'),
+    homeTitle: P('Make Every Marketing Enquiry Count | YECH', 'اجعل كل استفسار تسويقي فرصة تستحق المتابعة | YECH'),
     sections: [
       {
         type: 'hero',
         visual: 'dashboard',
-        eyebrow: P('DIGITAL GROWTH OPERATIONS FOR SAUDI BUSINESSES', 'عمليات النمو الرقمي للشركات في السعودية'),
+        eyebrow: P('YECH MARKETING OPERATIONS · FOR SAUDI BUSINESSES', 'YECH Marketing Operations · للشركات في السعودية'),
         title: P('Make Every Marketing Enquiry Count.', 'اجعل كل استفسار تسويقي فرصة تستحق المتابعة.'),
         lead: P(
           'Campaign management, lead tracking and coordinated follow-up in one organized growth service. Understand where enquiries come from, which prospects meet your criteria, and what happens next.',
@@ -458,7 +458,13 @@ export const corePages = [
       {
         type: 'intro',
         title: P('About Us', 'من نحن'),
-        lead: P('We are a digital marketing operations service for Saudi businesses. We combine campaign management with structured lead operations, so you can see what happens between advertising spend and commercial outcomes.', 'نحن خدمة عمليات تسويق رقمي للشركات في السعودية. نجمع بين إدارة الحملات والعمليات المنظمة للعملاء المحتملين، لتعرف ما يحدث بين الإنفاق الإعلاني والنتائج التجارية.'),
+        lead: P('We are YECH Marketing Operations, a digital marketing operations service for Saudi businesses. We combine campaign management with structured lead operations, so you can see what happens between advertising spend and commercial outcomes.', 'نحن YECH Marketing Operations، خدمة عمليات تسويق رقمي للشركات في السعودية. نجمع بين إدارة الحملات والعمليات المنظمة للعملاء المحتملين، لتعرف ما يحدث بين الإنفاق الإعلاني والنتائج التجارية.'),
+      },
+      {
+        type: 'notice',
+        tone: 'info',
+        title: P('Planned: YECH Marketing OS', 'مخطط: YECH Marketing OS'),
+        text: P('YECH Marketing OS is a software platform we intend to develop for lead tracking and follow-up. It is not available today. No pricing, features or launch date have been confirmed.', 'YECH Marketing OS منصة برمجية نعتزم تطويرها لتتبع العملاء المحتملين والمتابعة. وهي غير متاحة حالياً، ولم يتم تأكيد أي أسعار أو ميزات أو موعد إطلاق.'),
       },
       {
         type: 'cards',

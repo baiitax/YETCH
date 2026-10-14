@@ -3,11 +3,26 @@
 
 export const SITE = {
   // PLACEHOLDER: brand identity (confirm before launch)
-  brandName: { en: '[Brand Name]', ar: '[اسم العلامة]' },
+  // Company brand. Product names below are used in both languages in Latin script.
+  brandName: { en: 'YECH', ar: 'YECH' },
   tagline: {
     en: 'Turn Marketing Activity Into Measurable Growth.',
     ar: 'حوّل أنشطتك التسويقية إلى نمو قابل للقياس.',
   },
+  // Product naming. The service is offered now (subject to the confirmation steps in the
+  // publication checklist). The software platform is planned only and must not be
+  // presented as available.
+  offerings: {
+    service: {
+      name: { en: 'YECH Marketing Operations', ar: 'YECH Marketing Operations' },
+      status: 'available',
+    },
+    platform: {
+      name: { en: 'YECH Marketing OS', ar: 'YECH Marketing OS' },
+      status: 'planned',
+    },
+  },
+
   // PLACEHOLDER: production domain (used for canonical URLs, hreflang, sitemap).
   origin: 'https://example.invalid',
   defaultLang: 'en',
