@@ -1,0 +1,88 @@
+// Hand-maintained row types for the commercial schema. Keep in step with supabase/migrations.
+import type { LeadStatus, OpportunityStage, ProposalStatus } from '@/lib/domain/lifecycle';
+
+export type Lead = {
+  id: string;
+  first_name: string;
+  last_name: string;
+  job_title: string | null;
+  company_name: string | null;
+  company_id: string | null;
+  contact_id: string | null;
+  email: string | null;
+  phone: string | null;
+  city: string | null;
+  industry: string | null;
+  company_size: string | null;
+  source: string;
+  original_source: string;
+  source_campaign: string | null;
+  status: LeadStatus;
+  priority: 'low' | 'medium' | 'high';
+  estimated_value_minor: number | null;
+  currency: string;
+  service_of_interest: string | null;
+  qualification_notes: string | null;
+  qualified_at: string | null;
+  disqualified_reason: string | null;
+  communication_consent: string;
+  converted_opportunity_id: string | null;
+  owner_id: string | null;
+  last_activity_at: string | null;
+  notes: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+export type Opportunity = {
+  id: string;
+  name: string;
+  company_id: string | null;
+  contact_id: string | null;
+  lead_id: string | null;
+  service_of_interest: string | null;
+  owner_id: string | null;
+  stage: OpportunityStage;
+  amount_minor: number;
+  currency: string;
+  probability_pct: number | null;
+  expected_close_date: string | null;
+  next_action: string | null;
+  next_action_at: string | null;
+  loss_reason: string | null;
+  final_value_minor: number | null;
+  won_at: string | null;
+  lost_at: string | null;
+  last_activity_at: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+export type Proposal = {
+  id: string;
+  proposal_number: string;
+  opportunity_id: string;
+  title: string;
+  service_package: string;
+  scope_of_work: string;
+  deliverables: string | null;
+  exclusions: string | null;
+  timeline_text: string | null;
+  setup_fee_minor: number;
+  recurring_fee_minor: number;
+  currency: string;
+  payment_schedule: string | null;
+  assumptions: string | null;
+  client_responsibilities: string | null;
+  valid_until: string | null;
+  version: number;
+  status: ProposalStatus;
+  prepared_by: string | null;
+  approved_by: string | null;
+  approved_at: string | null;
+  sent_at: string | null;
+  sent_channel: string | null;
+  accepted_at: string | null;
+  acceptance_evidence: string | null;
+  created_at: string;
+};

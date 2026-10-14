@@ -144,6 +144,7 @@ function header(page, lang, ctx) {
       <div class="lang-switch" role="group" aria-label="${esc(ui.nav.langSwitch)}">
         <a href="${otherPath(page.slug)}" lang="${UI[other].htmlLang}" hreflang="${other}" data-lang-switch="${other}" class="lang-link">${esc(ui.otherLang.label)}</a>
       </div>
+      <a class="nav-login" href="${esc(SITE.engineLoginUrl)}" rel="noopener">${esc(ui.nav.loginCta)}</a>
       <a class="btn btn-ghost btn-sm" href="${slugPath('get-started')}">${esc(ui.nav.secondaryCta)}</a>
       <a class="btn btn-primary btn-sm" href="${slugPath('consultation')}">${esc(ui.nav.primaryCta)}</a>
       <button type="button" class="menu-toggle" aria-expanded="false" aria-controls="mobile-drawer" data-drawer-toggle>
@@ -175,6 +176,7 @@ function header(page, lang, ctx) {
       <div class="drawer-actions">
         <a class="btn btn-primary" href="${slugPath('consultation')}">${esc(ui.nav.primaryCta)}</a>
         <a class="btn btn-ghost" href="${slugPath('get-started')}">${esc(ui.nav.secondaryCta)}</a>
+        <a class="nav-login" href="${esc(SITE.engineLoginUrl)}" rel="noopener">${esc(ui.nav.loginCta)}</a>
         <a class="lang-link" href="${otherPath(page.slug)}" lang="${UI[other].htmlLang}" hreflang="${other}">${esc(ui.otherLang.label)}</a>
       </div>
     </nav>

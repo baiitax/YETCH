@@ -23,6 +23,10 @@ export const SITE = {
     },
   },
 
+  // Commercial Engine sign-in address. PROPOSED: engine.yech.sa, not yet registered or deployed.
+  // Set ENGINE_LOGIN_URL at build time once the domain resolves. Until then the Login link is a placeholder.
+  engineLoginUrl: (typeof process !== 'undefined' && process.env && process.env.ENGINE_LOGIN_URL) || 'https://engine.yech.sa/login',
+
   // PLACEHOLDER: production domain (used for canonical URLs, hreflang, sitemap).
   origin: 'https://example.invalid',
   defaultLang: 'en',

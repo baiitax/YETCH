@@ -1048,3 +1048,22 @@ html[dir='rtl'] .link-card:hover .icon-sm { transform: translate(-3px, -50%) sca
   .bars span,
   .pipe-bar { transform: none !important; }
 }
+
+/* Public-site Login link to the internal Commercial Engine (not a public sign-up). */
+.nav-login {
+  color: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  padding: 0.4rem 0.6rem;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+.nav-login:hover,
+.nav-login:focus-visible {
+  text-decoration: underline;
+}
+.nav-login:focus-visible {
+  outline: 3px solid currentColor;
+  outline-offset: 2px;
+}
