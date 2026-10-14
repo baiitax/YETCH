@@ -112,11 +112,17 @@ async function main() {
   // Vercel serves this file for unmatched paths (English 404, noindex).
   await writeHtml('404.html', renderPage(utilityPages.notFound, 'en', ctx));
 
+  // Login: a redirect only, not a sign-in form. The website has no auth backend, so the page
+  // forwards to the Commercial Engine sign-in (SITE.engineLoginUrl). No script: CSP-safe meta refresh.
+  const escAttr = (v) => String(v).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
+  const loginTarget = escAttr(SITE.engineLoginUrl);
+  await writeHtml('login/index.html', `<!doctype html><html lang="en" dir="ltr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Staff sign-in redirect for the YECH Commercial Engine."><link rel="canonical" href="${SITE.origin}/login/"><meta name="robots" content="noindex,nofollow"><meta http-equiv="refresh" content="0; url=${loginTarget}"><title>YECH Commercial Engine sign-in · تسجيل الدخول</title></head><body><main style="font-family:system-ui,sans-serif;max-width:40rem;margin:4rem auto;padding:0 1rem;line-height:1.6"><h1 style="font-size:1.25rem">Staff sign-in</h1><p>Redirecting to the YECH Commercial Engine sign-in. Staff accounts only; there is no public registration.</p><p><a href="${loginTarget}">Continue to sign-in</a></p><hr><p dir="rtl" lang="ar">جارٍ التحويل إلى تسجيل دخول محرك YECH التجاري. للموظفين فقط؛ لا يوجد تسجيل عام.</p><p dir="rtl" lang="ar"><a href="${loginTarget}">متابعة إلى تسجيل الدخول</a></p></main></body></html>`);
+
   // Root: language negotiation fallback (the server also redirects)
   await writeHtml('index.html', `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="robots" content="noindex"><meta http-equiv="refresh" content="0; url=/en/"><link rel="canonical" href="${SITE.origin}/en/"><title>${SITE.brandName.en}</title></head><body><a href="/en/">English</a> · <a href="/ar/">العربية</a><script>${INLINE.rootRedirect}</script></body></html>`);
 
   // robots.txt
-  const robots = `User-agent: *\nAllow: /\nDisallow: /api/\nDisallow: /en/404/\nDisallow: /ar/404/\nDisallow: /en/maintenance/\nDisallow: /ar/maintenance/\nDisallow: /en/subscription-confirmation/\nDisallow: /ar/subscription-confirmation/\n\nSitemap: ${SITE.origin.replace(/\/$/, '')}/sitemap.xml\n`;
+  const robots = `User-agent: *\nAllow: /\nDisallow: /api/\nDisallow: /en/404/\nDisallow: /ar/404/\nDisallow: /en/maintenance/\nDisallow: /ar/maintenance/\nDisallow: /en/subscription-confirmation/\nDisallow: /ar/subscription-confirmation/\nDisallow: /login/\n\nSitemap: ${SITE.origin.replace(/\/$/, '')}/sitemap.xml\n`;
   await writeFile(path.join(DIST, 'robots.txt'), robots, 'utf8');
 
   // sitemap.xml with hreflang alternates (indexable pages only)

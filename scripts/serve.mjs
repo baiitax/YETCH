@@ -90,6 +90,16 @@ async function servePage(req, res, urlPath, method) {
 
   if (parts[0] === 'healthz') return sendJson(res, config, 200, { ok: true });
 
+  // Login: redirect-only page that forwards to the Commercial Engine (no form, no auth here).
+  if (parts[0] === 'login' && parts.length === 1) {
+    if (!urlPath.endsWith('/')) {
+      res.writeHead(301, { Location: '/login/', ...securityHeaders(config) });
+      return res.end();
+    }
+    if (head) { res.writeHead(200, securityHeaders(config, { 'Content-Type': 'text/html; charset=utf-8' })); return res.end(); }
+    return sendFile(res, path.join(DIST, 'login', 'index.html'));
+  }
+
   const lang = parts[0] === 'ar' ? 'ar' : parts[0] === 'en' ? 'en' : null;
   if (!lang) return sendFile(res, path.join(DIST, 'en', '404', 'index.html'), 404, { 'Cache-Control': 'no-store' });
 
