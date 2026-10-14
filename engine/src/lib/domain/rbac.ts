@@ -19,6 +19,7 @@ export const CAPABILITIES = [
   'proposals.read', 'proposals.write', 'proposals.approve', 'proposals.record_acceptance',
   'tasks.read', 'tasks.write',
   'customers.read', 'customers.write', 'onboarding.update',
+  'operations.read', 'operations.write', 'approvals.request', 'approvals.decide', 'responsibilities.manage',
   'reports.read', 'audit.read', 'users.manage',
 ] as const;
 export type Capability = (typeof CAPABILITIES)[number];
@@ -34,6 +35,7 @@ export const ROLE_CAPABILITIES: Record<Role, ReadonlySet<Capability>> = {
     'proposals.read', 'proposals.write', 'proposals.approve', 'proposals.record_acceptance',
     'tasks.read', 'tasks.write',
     'customers.read', 'customers.write', 'onboarding.update',
+    'operations.read', 'operations.write', 'approvals.request', 'approvals.decide', 'responsibilities.manage',
     'reports.read',
   ]),
   sales_executive: new Set<Capability>([
@@ -43,10 +45,13 @@ export const ROLE_CAPABILITIES: Record<Role, ReadonlySet<Capability>> = {
     'proposals.read', 'proposals.write',
     'tasks.read', 'tasks.write',
   ]),
-  onboarding: new Set<Capability>(['customers.read', 'onboarding.update', 'opportunities.read']),
+  onboarding: new Set<Capability>([
+    'customers.read', 'onboarding.update', 'opportunities.read',
+    'operations.read', 'operations.write', 'approvals.request',
+  ]),
   reviewer: new Set<Capability>([
     'leads.read', 'companies.read', 'opportunities.read', 'proposals.read',
-    'tasks.read', 'customers.read', 'reports.read',
+    'tasks.read', 'customers.read', 'operations.read', 'reports.read',
   ]),
 };
 

@@ -75,6 +75,22 @@ login → dashboard → create lead → qualify (evidence required) → opportun
 - Set the environment variables from `.env.example` in Vercel's project settings. Do not commit them.
 - Domain: `engine.yech.sa` is **proposed**, not yet registered. Confirm the domain before wiring the public site's Login link. The website reads `ENGINE_LOGIN_URL` at build time.
 
+## Layer B: internal operations
+
+Service delivery for YECH's own customers. Lives in the same console as the commercial modules; it reuses customers, staff, roles, audit and reports.
+
+| Module | What it does | Key rules (enforced in the database) |
+| --- | --- | --- |
+| Service tasks | Delivery work per customer, with owner, priority and due date | Overdue is computed from the due date (not stored). Marking a task done requires an outcome note of 10+ characters. Reopening clears the completion time. |
+| Campaign activities | Status, owner, channel and dates for a campaign | No advertising spend, account credentials or passwords are stored. Going live requires an approved approval. Completed and cancelled are final. |
+| Approvals | Requests for approval on a service task or a campaign | Only a manager or founder approves or rejects, with a reason. Nobody decides their own request. Decisions are final. The requester may withdraw. One open request per item. |
+| Account responsibilities | Account lead, delivery lead, quality reviewer per customer | One active holder per responsibility per customer. Only active staff can hold one. Ending keeps the history. |
+| Operations report | On-time completion and overdue share | Business days in Asia/Riyadh. Each rate is shown as N/A when its denominator is zero. |
+
+Capabilities: `operations.read` (founder, manager, onboarding, reviewer), `operations.write` (founder, manager, onboarding), `approvals.request` (founder, manager, onboarding), `approvals.decide` and `responsibilities.manage` (founder, manager). Sales executives have no operations access.
+
+Lead pipelines are the existing Leads and Opportunities modules (Phases 2 and 3), not a second copy.
+
 ## Known limitations
 
 - `expired` and `superseded` proposal transitions are not guarded in the database.
@@ -84,6 +100,8 @@ login → dashboard → create lead → qualify (evidence required) → opportun
 - Reports cap at 5,000 rows, and the cohort conversion query uses at most 1,000 lead IDs. The UI shows an error notice when truncated.
 - Staff invitation and password reset are not runtime-tested. They need a configured Supabase project and a valid public URL.
 - Payment status is not recorded. A won deal never sets a paid status.
+- Layer B: the database rules are tested, but the pages have not been run against a live Supabase project yet. Approval requests on a service task are created from the Service tasks page or a customer page.
+- Layer B: the operations report counts only the first 2,000 records of each kind. Increase the limits or move the counts into SQL before the volume grows past that.
 
 ## Data rules
 

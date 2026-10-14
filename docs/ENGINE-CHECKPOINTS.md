@@ -6,10 +6,10 @@ Verification at this checkpoint (latest run):
 
 | Check | Result |
 | --- | --- |
-| `npm test` (unit) | 39 of 39 pass |
-| `npm run test:db` (RLS, triggers, demo path) | 42 of 42 pass |
+| `npm test` (unit) | 56 of 56 pass |
+| `npm run test:db` (RLS, triggers, demo path, operations) | 64 of 64 pass |
 | `npx tsc --noEmit` | exit 0 |
-| `next build` | exit 0 (25 routes) |
+| `next build` | exit 0 (all routes compile; one upstream Edge-runtime warning from the Supabase client) |
 | Website `npm run build`, `npm test`, `npm run check` | exit 0; 28 tests pass; no broken links |
 
 ## Phase 1: Foundation and authentication
@@ -41,6 +41,11 @@ Verification at this checkpoint (latest run):
 - **Built:** Reports with documented formulas. Qualified-to-won = won ÷ qualified. Acceptance rate = accepted ÷ sent, with open proposals kept in the denominator. Averages and pipeline values per currency. N/A on zero denominators. Read-only audit page filtered by entity. Team page: role and activation changes via RLS; invitations via a server-only admin client, which shows "not configured" without the service-role key or a valid public URL. Settings page shows configuration status and the role-capability matrix, never secrets.
 - **Verified:** Build. Database test checks report figures and that a manager cannot read the audit log, while a founder can.
 - **Open:** Invitation and password-reset flow not runtime-tested (needs Supabase configured). Cohort conversion uses at most 1,000 lead IDs; reports cap at 5,000 rows.
+
+## Layer B: internal operations
+- **Built:** Migration `0003_operations.sql` (service tasks, campaign activities, approvals, account responsibilities; RLS; lifecycle and approval guards; audit triggers). Pages: Operations dashboard with operations report, Service tasks, Campaigns, Approvals. Operations panel on each customer page. Navigation item.
+- **Verified:** Database: 22 operations tests (access by role, completion evidence, reopening, approval self-decision and reviewer refusals, decisions final, notes required, one open request per item, withdrawal by requester only, field locking, go-live gated by approval, terminal statuses, responsibility uniqueness and active-only holders, end-and-keep history, audit read by founder only, no spend or credential columns). Unit: overdue and on-time rules, N/A formulas, approval mirror rules, input schemas (including strict calendar dates), role matrix. Build passes. Routes redirect when unconfigured.
+- **Open:** Pages not yet exercised in a browser against a live Supabase project. Audit view does not yet show operations events with labels. The operations report reads at most 2,000 rows per table.
 
 ## Cross-cutting
 - **Public website Login link:** Added to the header and mobile drawer. It points to `SITE.engineLoginUrl`, which defaults to the **proposed** `https://engine.yech.sa/login`. The domain is not yet registered, so the link leads nowhere until DNS and deployment are in place. Override with `ENGINE_LOGIN_URL` at build time.

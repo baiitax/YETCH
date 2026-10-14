@@ -12,6 +12,7 @@ import { noticeText } from '@/lib/notices';
 import { messageFor } from '@/lib/errors';
 import { UUID_PATTERN } from '@/lib/actions/helpers';
 import { updateOnboardingItemAction, updateCustomerStatusAction } from '../actions';
+import { OperationsPanel } from './operations-panel';
 
 export const dynamic = 'force-dynamic';
 
@@ -41,6 +42,17 @@ export default async function CustomerDetailPage({
   const done = list.filter((i) => i.state === 'verified' || i.state === 'completed').length;
   const canOnboard = can(role, 'onboarding.update');
   const canManage = can(role, 'customers.write');
+
+  // Internal operations for this customer. Loaded only for roles that can read operations; RLS applies too.
+  const showOps = can(role, 'operations.read');
+  const svc = showOps ? await supabase.from('service_tasks').select('*').eq('customer_id', id).order('due_on', { ascending: true }) : { data: [] };
+  const camp = showOps ? await supabase.from('campaign_activities').select('*').eq('customer_id', id).order('created_at', { ascending: false }) : { data: [] };
+  const resp = showOps ? await supabase.from('account_responsibilities').select('*').eq('customer_id', id).order('assigned_at', { ascending: false }) : { data: [] };
+  const appr = showOps ? await supabase.from('approvals').select('service_task_id, campaign_id, status').in('status', ['requested', 'approved']).limit(2000) : { data: [] };
+  const apprRows = appr.data ?? [];
+  const approvedCampaignIds = new Set(apprRows.filter((a) => a.status === 'approved' && a.campaign_id).map((a) => a.campaign_id as string));
+  const openCampaignIds = new Set(apprRows.filter((a) => a.status === 'requested' && a.campaign_id).map((a) => a.campaign_id as string));
+  const openTaskIds = new Set(apprRows.filter((a) => a.status === 'requested' && a.service_task_id).map((a) => a.service_task_id as string));
 
   return (
     <>
@@ -115,6 +127,20 @@ export default async function CustomerDetailPage({
           </div>
         )}
       </section>
+      {showOps ? (
+        <OperationsPanel
+          customerId={id}
+          role={role}
+          userId={session.userId}
+          people={people}
+          tasks={(svc.data ?? []) as any}
+          campaigns={(camp.data ?? []) as any}
+          responsibilities={(resp.data ?? []) as any}
+          approvedCampaignIds={approvedCampaignIds}
+          openCampaignIds={openCampaignIds}
+          openTaskIds={openTaskIds}
+        />
+      ) : null}
       <p style={{ marginTop: 14 }}><Link href="/customers">Back to customers</Link></p>
     </>
   );

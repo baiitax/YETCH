@@ -11,6 +11,7 @@ const GROUPS: Group[] = [
     { href: '/dashboard', label: 'Dashboard' },
     { href: '/leads', label: 'Leads', capability: 'leads.read' },
     { href: '/follow-ups', label: 'Follow-ups', capability: 'tasks.read' },
+    { href: '/operations', label: 'Operations', capability: 'operations.read' },
   ] },
   { title: 'Pipeline', items: [
     { href: '/companies', label: 'Companies', capability: 'companies.read' },

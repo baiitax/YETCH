@@ -8,6 +8,7 @@ import { localInputToIso } from '@/lib/domain/time';
 import { PACKAGES, type PackageKey } from '@/lib/domain/packages';
 import { ROLES } from '@/lib/domain/rbac';
 import { passwordProblem } from '@/lib/security';
+import { SERVICE_TASK_STATUSES, CAMPAIGN_STATUSES, CAMPAIGN_CHANNELS, RESPONSIBILITIES, MIN_NOTE_LENGTH } from '@/lib/domain/operations';
 
 export type FieldErrors = Record<string, string>;
 export type ParseResult<T> = { ok: true; data: T } | { ok: false; errors: FieldErrors };
@@ -333,3 +334,112 @@ export const leadAssignSchema = z.object({
   lead_id: uuid,
   owner_id: z.string().trim().refine((v) => v === '' || uuid.safeParse(v).success, 'Choose a valid owner.').transform((v) => v || null),
 });
+
+// ---------- internal operations (Layer B) ----------
+const DATE_ONLY = /^\d{4}-\d{2}-\d{2}$/;
+/** A real calendar day. Date.parse rolls invalid days over (2026-02-31 becomes March), so round-trip instead. */
+function isRealDay(v: string): boolean {
+  if (!DATE_ONLY.test(v)) return false;
+  const d = new Date(`${v}T00:00:00Z`);
+  return !Number.isNaN(d.getTime()) && d.toISOString().slice(0, 10) === v;
+}
+const optionalUuid = z.preprocess(
+  (v) => (v === undefined ? '' : v),
+  z.string().trim().refine((v) => v === '' || uuid.safeParse(v).success, 'Choose a valid person.').transform((v) => v || null),
+);
+const optionalDate = z.preprocess(
+  (v) => (v === undefined ? '' : v),
+  z
+    .string()
+    .trim()
+    .refine((v) => v === '' || isRealDay(v), 'Choose a valid date.')
+    .transform((v) => v || null),
+);
+const requiredDate = z
+  .string()
+  .trim()
+  .refine((v) => isRealDay(v), 'Choose a due date.');
+
+export const serviceTaskSchema = z.object({
+  customer_id: uuid,
+  title: z.string().trim().min(2, 'Add a short title.').max(200),
+  description: optionalNote(2000),
+  priority: z.enum(['low', 'medium', 'high']).default('medium'),
+  owner_id: optionalUuid,
+  due_on: requiredDate,
+}).transform((v) => ({ ...v, description: v.description || null }));
+
+export const serviceTaskUpdateSchema = z
+  .object({
+    task_id: uuid,
+    status: z.enum(SERVICE_TASK_STATUSES),
+    completion_note: optionalNote(2000),
+  })
+  .superRefine((v, ctx) => {
+    if (v.status === 'done' && v.completion_note.length < MIN_NOTE_LENGTH) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ['completion_note'],
+        message: `Describe the outcome in at least ${MIN_NOTE_LENGTH} characters before marking the task done.`,
+      });
+    }
+  });
+
+export const campaignSchema = z
+  .object({
+    customer_id: uuid,
+    name: z.string().trim().min(2, 'Name the campaign.').max(160),
+    channel: z.enum(CAMPAIGN_CHANNELS),
+    owner_id: optionalUuid,
+    starts_on: optionalDate,
+    ends_on: optionalDate,
+    objective: optionalNote(500),
+    notes: optionalNote(2000),
+  })
+  .superRefine((v, ctx) => {
+    if (v.starts_on && v.ends_on && v.ends_on < v.starts_on) {
+      ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['ends_on'], message: 'The end date must be on or after the start date.' });
+    }
+  })
+  .transform((v) => ({ ...v, objective: v.objective || null, notes: v.notes || null }));
+
+export const campaignStatusSchema = z.object({
+  campaign_id: uuid,
+  status: z.enum(CAMPAIGN_STATUSES),
+});
+
+export const approvalRequestSchema = z.object({
+  subject: z.enum(['service_task', 'campaign']),
+  subject_id: uuid,
+  request_note: z
+    .string()
+    .trim()
+    .min(MIN_NOTE_LENGTH, `Explain what needs approval (at least ${MIN_NOTE_LENGTH} characters).`)
+    .max(1000),
+});
+
+export const approvalDecisionSchema = z
+  .object({
+    approval_id: uuid,
+    decision: z.enum(['approved', 'rejected']),
+    decision_note: z.string().trim().max(1000).default(''),
+  })
+  .superRefine((v, ctx) => {
+    if (v.decision_note.length < MIN_NOTE_LENGTH) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ['decision_note'],
+        message: `Record the reason in at least ${MIN_NOTE_LENGTH} characters.`,
+      });
+    }
+  });
+
+export const approvalWithdrawSchema = z.object({ approval_id: uuid });
+
+export const responsibilitySchema = z.object({
+  customer_id: uuid,
+  profile_id: uuid,
+  responsibility: z.enum(RESPONSIBILITIES),
+});
+
+export const responsibilityEndSchema = z.object({ responsibility_id: uuid, customer_id: uuid });
